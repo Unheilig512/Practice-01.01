@@ -1,0 +1,18 @@
+using System;
+namespace ConsoleApplication1
+{
+    class
+    Program
+    {
+        static void Main()
+        {
+            Console.WriteLine("Введите x и y: ");
+            int x, y;
+            x = Convert.ToInt32(Console.ReadLine());
+            y = Convert.ToInt32(Console.ReadLine());
+            double p = Math.Pow(1 + (1 / x * x), x) - 12 * x * x * y;
+            Console.WriteLine("Результат = " + p);
+        }
+    }
+
+}
