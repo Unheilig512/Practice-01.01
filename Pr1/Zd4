@@ -1,0 +1,23 @@
+using System;
+namespace ConsoleApplication1
+{
+    class
+    Program
+    {
+        static void Main()
+        {
+                Console.WriteLine("Введите символ: ");
+                char ch = Console.ReadLine()[0];
+
+                if (Char.IsLetter(ch))
+                {
+                    Console.WriteLine("Буква: " + ch);
+                }
+                else if (Char.IsDigit(ch))
+                {
+                    Console.WriteLine("Цифра: " + ch);
+                }          
+        }
+    }
+
+}
