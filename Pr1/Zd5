@@ -1,0 +1,57 @@
+using System;
+namespace ConsoleApplication1
+{
+    class
+    Program
+    {
+        static void Main()
+        {
+            int s = 0; 
+            double d = 0, q = 0;
+            do
+            {
+                Console.WriteLine();
+                Console.WriteLine("Введите выбор: (5 - exit)");
+                s = Convert.ToInt32(Console.ReadLine()); if (s == 5) break;
+                else
+                {
+                    Console.WriteLine("Введите длину отрезка: ");
+                    q = Convert.ToDouble(Console.ReadLine());
+
+                    switch (s)
+                    {
+                        case 1:
+                            {
+                                d = q / 10;
+                                Console.WriteLine(q + " дециметров = " + d + " метров");
+                                break;
+                            }
+
+                        case 2:
+                            {
+                                d = q * 1000;
+                                Console.WriteLine(q + " километров = " + d + " метров");
+                                break;
+                            }
+
+                        case 3:
+                            {
+                                d = q / 1000;
+                                Console.WriteLine(q + " миллиметров = " + d + " метров");
+                                break;
+                            }
+                        case 4:
+                            {
+                                d = q / 100;
+                                Console.WriteLine(q + " сантиметров = " + d + " метров");
+                                break;
+                            }
+                    }
+                }
+
+            } while (true);
+                        
+        }
+    }
+
+}
