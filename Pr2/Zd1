@@ -1,0 +1,44 @@
+using System;
+namespace ConsoleApplication1
+{
+    class
+    Program
+    {
+        static void Main()
+        {
+
+            Console.WriteLine("Введите точки отрезка - а и b");
+            double a = Convert.ToDouble(Console.ReadLine());
+            double b = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine("Введите шаг h");
+            double h = Convert.ToDouble(Console.ReadLine());
+            double y;
+
+            try
+            {
+                if (a == 0) throw new DivideByZeroException();
+                for (double i = a; i <= b; i += h)
+                {
+                    y = 1.0 / Math.Tan(i / 3.0) + 0.5 * i * Math.Sin(i);
+                    Console.WriteLine($"y = {y} при x = {i}");
+                }
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Ошибка формата ввода");
+
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("Ошибка переполнения");
+            }
+            catch (DivideByZeroException)
+            {
+                Console.WriteLine("Ошибка деления на ноль");
+            }
+
+            
+        }
+    }
+}
