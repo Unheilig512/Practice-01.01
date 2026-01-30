@@ -34,8 +34,7 @@ namespace ConsoleApplication1
                     return false;
             }
 
-            int mainDlSum = 0;
-            int secondaryDlSum = 0;
+            int mainDlSum = 0, secondaryDlSum = 0;
             for (int i = 0; i < n; i++)
             {
                 mainDlSum += matrix[i, i];
