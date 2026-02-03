@@ -1,8 +1,10 @@
+cusing System;
+namespace Practice;
 class Program
 {
     static void Main()
     {
-       
+
         Console.WriteLine("Введите начальное значение x:");
         double xStart = double.Parse(Console.ReadLine());
 
@@ -15,32 +17,33 @@ class Program
         Console.WriteLine("Введите точность e:");
         double e = double.Parse(Console.ReadLine());
 
-       
+
         Console.WriteLine("{0,15} | {1,15} | {2,20}", "x", "arctg(x)", "Число членов ряда");
         Console.WriteLine(new string('-', 60));
 
         for (double x = xStart; x <= xEnd; x += dx)
         {
-            if (x == 1 || x == -1)
+            try
+            {
+                double sum = 0;
+                int n = 0;
+                double term;
+                double previousSum = 0;
+
+                do
+                {
+                    // arctg(x) = Σ_{n=0}^∞ ((-1)^n * x^{2n+1}) / (2n+1)
+                    term = Math.Pow(-1, n) * Math.Pow(x, 2 * n + 1) / (2 * n + 1);
+                    sum += term;
+                    n++;
+                } while (Math.Abs(term) > e);
+                Console.WriteLine("{0,15:F4} | {1,15:F8} | {2,20}", x, sum, n);
+
+            }
+            catch (ArithmeticException)
             {
                 Console.WriteLine("{0,15:F4} | {1,15} | {2,20}", x, "не определено", "-");
-                continue;
             }
-
-            double sum = 0;
-            int n = 0;
-            double term;
-            double previousSum = 0;
-
-            do
-            {
-                // arctg(x) = Σ_{n=0}^∞ ((-1)^n * x^{2n+1}) / (2n+1)
-                term = Math.Pow(-1, n) * Math.Pow(x, 2 * n + 1) / (2 * n + 1);
-                sum += term;
-                n++;
-            } while (Math.Abs(term) > e);
-
-            Console.WriteLine("{0,15:F4} | {1,15:F8} | {2,20}", x, sum, n);
         }
     }
 }
