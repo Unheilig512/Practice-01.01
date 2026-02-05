@@ -8,11 +8,8 @@ class ChatMessage
 {
     public string UserName;
     public int Password;
-    public string SendText;
-    public string RecName;
     public DateTime time;
-    public int Come = 0;
-
+    public List<int> Come = new List<int>();
     List<string> messages;
 
     public ChatMessage()
@@ -24,12 +21,11 @@ class ChatMessage
     {
         Console.WriteLine();
         Console.WriteLine("Введите текст сообщения (Enter - отправить сообщение)");
-        sender.SendText = Console.ReadLine();
+        string SendText = Console.ReadLine();
         sender.time = DateTime.Now;
-        sender.RecName = recipient.UserName;
-        recipient.Come++;
+        recipient.Come.Add(messages.Count);
 
-        messages.Add(sender.SendText + " /// От" + sender.UserName + " /// Кому " + recipient.UserName);
+        messages.Add(SendText + " /// От" + sender.UserName + " /// Кому " + recipient.UserName);
     }
 
     public void Search(ChatMessage sender, List<ChatMessage> users)
@@ -44,7 +40,7 @@ class ChatMessage
                 if (users[i].UserName == n)
                 {
                     sender.Messaging(sender, users[i]);
-                    break;
+                    return;
                 }
             }
             if (i == users.Count)
@@ -56,23 +52,35 @@ class ChatMessage
 
     public void Viewing(ChatMessage user, List<ChatMessage> users)
     {
-        if (user.Come == 0) Console.WriteLine("У вас нету входящих сообщений");
-        else
+        if (user.Come == null || user.Come.Count == 0)
         {
-            Console.WriteLine("Входящие сообщения: ");
+            Console.WriteLine("У вас нет входящих сообщений");
+            return;
+        }
 
-            for (int j = 0; j < users.Count; j++)
+        Console.WriteLine("Входящие сообщения: ");
+
+        for (int s = 0; s < users.Count; s++)
+        {
+            var sender = users[s];
+            for (int ci = 0; ci < user.Come.Count; ci++)
             {
-                if (users[j].RecName == user.UserName)
+                int msgIndex = user.Come[ci];
+
+                if (sender.messages != null && msgIndex >= 0 && msgIndex < sender.messages.Count)
                 {
                     new Program().Line();
-                    Console.WriteLine("Отправитель: " + users[j].UserName);
-                    Console.WriteLine("Время отправления: " + users[j].time);
+                    Console.WriteLine("Отправитель: " + sender.UserName);
+                    Console.WriteLine("Время отправления: " + sender.time);
                     Console.WriteLine();
-                    Console.WriteLine(users[j].SendText);
-                    new Program().Line();
 
-                    user.Come--;
+                    string full = sender.messages[msgIndex];
+
+                    int sep = full.IndexOf(" ///");
+                    string textToShow = sep >= 0 ? full.Substring(0, sep) : full;
+                    Console.WriteLine(textToShow);
+                    Come.RemoveAt(ci);
+                    new Program().Line();
                     Console.WriteLine();
                 }
             }
@@ -96,7 +104,7 @@ class Program
 
     public List<ChatMessage> users = new List<ChatMessage>();
 
-    // приложение-старт
+    //Ja, ja ich bin verrückt
     public static void Main()
     {
         new Program().main();
@@ -111,6 +119,7 @@ class Program
             Console.WriteLine("1 - Регистрация ");
             Console.WriteLine("2 - Вход");
             Console.WriteLine("3 - закрыть приложение");
+            Console.WriteLine();
             k = Convert.ToInt32(Console.ReadLine());
             int i = 0;
             switch (k)
@@ -124,7 +133,9 @@ class Program
                         int p = Convert.ToInt32(Console.ReadLine());
                         ChatMessage user = Register(n, p);
                         users.Add(user);
+                        Console.WriteLine();
                         Console.WriteLine("Пользователь создан");
+                        Line();
                         break;
                     }
 
@@ -147,6 +158,7 @@ class Program
                         {
                             Console.WriteLine("Неверное имя пользователя или пароль");
                         }
+                        Line();
                         break;
                     }
             }
@@ -166,18 +178,20 @@ class Program
             Console.WriteLine("1 - Написать сообщение ");
             Console.WriteLine("2 - Прочитать входящие сообщения");
             Console.WriteLine("3 - выход из профиля");
-            int i;
+            Console.WriteLine();
             k = Convert.ToInt32(Console.ReadLine());
             switch (k)
             {
                 case 1:
                     {
                         user.Search(user, users);
+                        Line();
                         break;
                     }
                 case 2:
                     {
                         user.Viewing(user, users);
+                        Line();
                         break;
                     }
             }
