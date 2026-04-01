@@ -1,0 +1,23 @@
+using System;
+namespace ConsoleApplication1
+{
+    class
+    Program
+    {
+        static void Main()
+        {
+            double e, a = 0, sum = 0;
+            Console.WriteLine("Введите число ε: ");
+            e = Convert.ToDouble(Console.ReadLine());
+            int i = 1;
+            do
+            { 
+                sum += a;
+                a = 1 / Math.Pow(2, i) + 1 / Math.Pow(3, i);
+                i++;
+            } while (a >= e);
+            Console.WriteLine("Сумма = " + sum);
+        }
+    }
+
+}

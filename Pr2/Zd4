@@ -1,0 +1,113 @@
+using System;
+namespace ConsoleApplication1
+{
+    class
+    Program
+    {
+        static bool MatrixIdentification(int[,] matrix)
+        {
+            int n = matrix.GetLength(0);
+            int sum = 0;
+
+            for (int j = 0; j < n; j++)
+            {
+                sum += matrix[0, j];
+            }
+            for (int i = 1; i < n; i++)
+            {
+                int rowSum = 0;
+                for (int j = 0; j < n; j++)
+                {
+                    rowSum += matrix[i, j];
+                }
+                if (rowSum != sum)
+                    return false;
+            }
+            for (int j = 0; j < n; j++)
+            {
+                int colSum = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    colSum += matrix[i, j];
+                }
+                if (colSum != sum)
+                    return false;
+            }
+
+            int mainDlSum = 0, secondaryDlSum = 0;
+            for (int i = 0; i < n; i++)
+            {
+                mainDlSum += matrix[i, i];
+                secondaryDlSum += matrix[i, n - i - 1];
+            }
+            if (mainDlSum != sum)
+                return false;
+            if (secondaryDlSum != sum)
+                return false;
+
+            return true;
+        }
+
+        static void Result(int[,] matrix)
+        {
+            Console.WriteLine();
+            if (MatrixIdentification(matrix))
+            {
+                Console.WriteLine("Это магический квадрат");
+            }
+            else
+            {
+                Console.WriteLine("Это не магический квадрат");
+            }
+        }
+
+        static void Main()
+        {
+
+            Console.WriteLine("Введите число n:");
+            int n = int.Parse(Console.ReadLine());
+            int[,] mas = new int[n, n];
+            
+            Console.WriteLine("Введите способ заполнения матрицы:");
+            Console.WriteLine("1 - заполнить единицами");
+            Console.WriteLine("2 - заполнить случайными числами");
+
+            int k = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine();
+            switch (k)
+            {
+                case 1:
+                    {
+                        for(int i = 0; i < n; i++)
+                        {
+                            for(int j = 0; j < n; j++)
+                            {
+                                mas[i, j] = 1;
+                                Console.Write(mas[i, j] + " ");
+                            }
+                            Console.WriteLine();
+                        }
+                        Result(mas);
+                        break;
+                    }
+                case 2:
+                    {
+                        Random random = new Random();
+                        for (int i = 0; i < n; i++)
+                        {
+                            for (int j = 0; j < n; j++)
+                            {
+                                mas[i,j] = random.Next(0, 10);
+                                Console.Write(mas[i, j] + " ");
+                            }
+                            Console.WriteLine();
+                        }
+                        Result(mas);
+                        break;
+
+                    }
+            }
+
+        }
+    }
+}

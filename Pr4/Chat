@@ -1,0 +1,202 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Chat;
+
+class ChatMessage
+{
+    public string UserName;
+    public int Password;
+    public DateTime time;
+    public List<int> Come = new List<int>();
+    List<string> messages;
+
+    public ChatMessage()
+    {
+        messages = new List<string>();
+    }
+
+    public void Messaging(ChatMessage sender, ChatMessage recipient)
+    {
+        Console.WriteLine();
+        Console.WriteLine("Введите текст сообщения (Enter - отправить сообщение)");
+        string SendText = Console.ReadLine();
+        sender.time = DateTime.Now;
+        recipient.Come.Add(messages.Count);
+
+        messages.Add(SendText + " /// От" + sender.UserName + " /// Кому " + recipient.UserName);
+    }
+
+    public void Search(ChatMessage sender, List<ChatMessage> users)
+    {
+        string n; int i;
+        do
+        {
+            Console.WriteLine("Введите имя пользователя, которому будет отправлено сообщение ");
+            n = Console.ReadLine();
+            for (i = 0; i < users.Count; i++)
+            {
+                if (users[i].UserName == n)
+                {
+                    sender.Messaging(sender, users[i]);
+                    return;
+                }
+            }
+            if (i == users.Count)
+            {
+                Console.WriteLine("Такого пользователя не существует");
+            }
+        } while (n != "");
+    }
+
+    public void Viewing(ChatMessage user, List<ChatMessage> users)
+    {
+        if (user.Come == null || user.Come.Count == 0)
+        {
+            Console.WriteLine("У вас нет входящих сообщений");
+            return;
+        }
+
+        Console.WriteLine("Входящие сообщения: ");
+
+        for (int s = 0; s < users.Count; s++)
+        {
+            var sender = users[s];
+            for (int ci = 0; ci < user.Come.Count; ci++)
+            {
+                int msgIndex = user.Come[ci];
+
+                if (sender.messages != null && msgIndex >= 0 && msgIndex < sender.messages.Count)
+                {
+                    new Program().Line();
+                    Console.WriteLine("Отправитель: " + sender.UserName);
+                    Console.WriteLine("Время отправления: " + sender.time);
+                    Console.WriteLine();
+
+                    string full = sender.messages[msgIndex];
+
+                    int sep = full.IndexOf(" ///");
+                    string textToShow = sep >= 0 ? full.Substring(0, sep) : full;
+                    Console.WriteLine(textToShow);
+                    Come.RemoveAt(ci);
+                    new Program().Line();
+                    Console.WriteLine();
+                }
+            }
+        }
+    }
+}
+
+
+class Program
+{
+    public void Line() { Console.WriteLine(String.Concat(Enumerable.Repeat("-", 20))); }
+
+    public ChatMessage Register(string name, int pass)
+    {
+        ChatMessage user = new ChatMessage();
+        user.UserName = name;
+        user.Password = pass;
+
+        return user;
+    }
+
+    public List<ChatMessage> users = new List<ChatMessage>();
+
+    //Ja, ja ich bin verrückt
+    public static void Main()
+    {
+        new Program().main();
+    }
+
+    public int main()
+    {
+        int k;
+        do
+        {
+            Console.WriteLine("Выбор действий: ");
+            Console.WriteLine("1 - Регистрация ");
+            Console.WriteLine("2 - Вход");
+            Console.WriteLine("3 - закрыть приложение");
+            Console.WriteLine();
+            k = Convert.ToInt32(Console.ReadLine());
+            int i = 0;
+            switch (k)
+            {
+                case 1:
+                    {
+                        Line();
+                        Console.WriteLine("Придумайте имя пользователя");
+                        string n = Console.ReadLine();
+                        Console.WriteLine("Придумайте пароль (Числовой)");
+                        int p = Convert.ToInt32(Console.ReadLine());
+                        ChatMessage user = Register(n, p);
+                        users.Add(user);
+                        Console.WriteLine();
+                        Console.WriteLine("Пользователь создан");
+                        Line();
+                        break;
+                    }
+
+                case 2:
+                    {
+                        Line();
+                        Console.WriteLine("Введите имя пользователя");
+                        string n = Console.ReadLine();
+                        Console.WriteLine("Введите пароль (Числовой)");
+                        int p = Convert.ToInt32(Console.ReadLine());
+                        for (i = 0; i < users.Count; i++)
+                        {
+                            if (users[i].UserName == n && users[i].Password == p)
+                            {
+                                Raum(users[i]);
+                                break;
+                            }
+                        }
+                        if (i == users.Count)
+                        {
+                            Console.WriteLine("Неверное имя пользователя или пароль");
+                        }
+                        Line();
+                        break;
+                    }
+            }
+        } while (k != 3);
+        return 0;
+    }
+
+
+    public void Raum(ChatMessage user)
+    {
+        int k;
+        do
+        {
+            Console.WriteLine("Личный кабинет");
+            Console.WriteLine();
+            Console.WriteLine("Выбор действий:");
+            Console.WriteLine("1 - Написать сообщение ");
+            Console.WriteLine("2 - Прочитать входящие сообщения");
+            Console.WriteLine("3 - выход из профиля");
+            Console.WriteLine();
+            k = Convert.ToInt32(Console.ReadLine());
+            switch (k)
+            {
+                case 1:
+                    {
+                        user.Search(user, users);
+                        Line();
+                        break;
+                    }
+                case 2:
+                    {
+                        user.Viewing(user, users);
+                        Line();
+                        break;
+                    }
+            }
+
+        } while (k != 3);
+
+    }
+}
